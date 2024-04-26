@@ -12,6 +12,6 @@ export default class Helloworld extends cc.Component {
     start () {
         let version = Web3.version;
         console.log(version)
-        this.label.string = "web3:" + version;
+        // this.label.string = "web3:" + version;
     }
 }
