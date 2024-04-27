@@ -2,5 +2,8 @@
 
 ![Alt text](images/game-logo.png)
 
-## gaming main scene
+## main scene
 ![Alt text](images/demo1.png)
+
+## game scene
+![Alt text](images/demo2.png)
