@@ -2,5 +2,6 @@
   "engine": "cocos2d-html5",
   "packages": "packages",
   "version": "2.1.3",
-  "id": "91cfc42b-74f8-46d0-96ea-39419995e825"
+  "name": "zk-simulated-trading",
+  "id": "7752fd3d-3985-41a3-a2bf-451307105da6"
 }

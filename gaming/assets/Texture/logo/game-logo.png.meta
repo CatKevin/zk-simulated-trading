@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "7d0ed050-4efb-4ef4-b42f-671307b6fcc5",
+  "uuid": "f08b8ce1-f862-43e4-931c-50351e78639f",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -11,8 +11,8 @@
   "subMetas": {
     "game-logo": {
       "ver": "1.0.4",
-      "uuid": "34c27ace-36c2-427b-9f38-0ce266649727",
-      "rawTextureUuid": "7d0ed050-4efb-4ef4-b42f-671307b6fcc5",
+      "uuid": "e6aff218-da21-4e15-a435-a7989abff427",
+      "rawTextureUuid": "f08b8ce1-f862-43e4-931c-50351e78639f",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
