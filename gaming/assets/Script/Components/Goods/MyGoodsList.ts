@@ -22,7 +22,7 @@ export default class MyGoodsList extends cc.Component {
         }
         if (data[i] && this.content.children[i]) {
           this.content.children[i].active = true;
-          console.log(data[i])
+          // console.log(data[i])
           this.content.children[i].getComponent("MyGoodsItems").set(data[i].rangePrice, data[i].id,data[i].num);
         } else if (data[i] && !this.content.children[i]) {
           let node = cc.instantiate(this.itemPrefab);

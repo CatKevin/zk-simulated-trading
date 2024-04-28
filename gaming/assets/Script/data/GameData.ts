@@ -1,5 +1,5 @@
 const { ccclass, property } = cc._decorator;
-import { GoodsList,GoodsMarketTips } from "./StaticData";
+import { GoodsList, GoodsMarketTips } from "./StaticData";
 import NodeData from "./NodeData";
 import GoodsItem from "../components/Goods/GoodsItem";
 
@@ -36,90 +36,96 @@ export default class GameData extends cc.Component {
   private maxTotoalWareHouseCapcity = 200;
 
   private eventObj = {
-    maxAssets:0,
-    maxAssetsAge:0,
-    firstAge:0,
-    secondAge:0,
-    thirdAge:0,
-    forthAge:0,
-    currentAge:0,
-  }
+    maxAssets: 0,
+    maxAssetsAge: 0,
+    firstAge: 0,
+    secondAge: 0,
+    thirdAge: 0,
+    forthAge: 0,
+    currentAge: 0,
+  };
 
   initData() {
-    console.log("init data")
+    console.log("init data");
   }
 
-  start () {
-    this.updateGoodsMarketData()
+  start() {
+    this.updateGoodsMarketData();
+    this.updateGoodsMarketCurrentUI();
     this.eventObj.maxAssets = this.totalAssets;
   }
 
-  expandCapcityByCash(){
-    if(this.totoalWareHouseCapcity>=this.maxTotoalWareHouseCapcity){
+  expandCapcityByCash() {
+    if (this.totoalWareHouseCapcity >= this.maxTotoalWareHouseCapcity) {
       return;
     }
-    let cashTmp = Math.floor(this.totalAssets/2)
-    if(this.myCash>cashTmp){
+    let cashTmp = Math.floor(this.totalAssets / 2);
+    if (this.myCash > cashTmp) {
       this.myCash = this.myCash - cashTmp;
       this.totalAssets = this.totalAssets - cashTmp;
       this.totoalWareHouseCapcity = this.totoalWareHouseCapcity + 10;
       this.CashNode.getComponent(cc.Label).string = this.FormatNum(this.myCash);
-      this.TotalAssetsNode.getComponent(cc.Label).string = this.FormatNum(this.totalAssets);
-      this.WareNode.getChildByName("positionNum").getComponent(cc.Label).string = this.WareHouseCapcity + '/' + this.totoalWareHouseCapcity;
+      this.TotalAssetsNode.getComponent(cc.Label).string = this.FormatNum(
+        this.totalAssets
+      );
+      this.WareNode.getChildByName("positionNum").getComponent(
+        cc.Label
+      ).string = this.WareHouseCapcity + "/" + this.totoalWareHouseCapcity;
       return 1;
-    }else{
-      console.log("Not enough cash")
+    } else {
+      console.log("Not enough cash");
       return 0;
     }
   }
 
-  flagExpand(){
-    if(this.totoalWareHouseCapcity>=this.maxTotoalWareHouseCapcity){
+  flagExpand() {
+    if (this.totoalWareHouseCapcity >= this.maxTotoalWareHouseCapcity) {
       return;
     }
   }
 
-  expandCapcityByETH(){
+  expandCapcityByETH() {
     this.totoalWareHouseCapcity = this.totoalWareHouseCapcity + 10;
-    this.WareNode.getChildByName("positionNum").getComponent(cc.Label).string = this.WareHouseCapcity + '/' + this.totoalWareHouseCapcity;
+    this.WareNode.getChildByName("positionNum").getComponent(cc.Label).string =
+      this.WareHouseCapcity + "/" + this.totoalWareHouseCapcity;
   }
 
-  getUserCurrentAssets(){
+  getUserCurrentAssets() {
     return {
-      myCash:this.myCash,
-      totalAssets:this.totalAssets,
-    }
+      myCash: this.myCash,
+      totalAssets: this.totalAssets,
+    };
   }
 
-  leavePanelGetData(){
+  leavePanelGetData() {
     return {
-      eventObj:this.eventObj,
-      totalAssets:this.totalAssets,
-    }
+      eventObj: this.eventObj,
+      totalAssets: this.totalAssets,
+    };
   }
 
-  updateEvent(assetsNum){
-    if(assetsNum>10**9){
-      if(this.eventObj.forthAge == 0){
+  updateEvent(assetsNum) {
+    if (assetsNum > 10 ** 9) {
+      if (this.eventObj.forthAge == 0) {
         this.eventObj.forthAge = this.currentAge;
       }
     }
-    if(assetsNum>10**8){
-      if(this.eventObj.thirdAge == 0){
+    if (assetsNum > 10 ** 8) {
+      if (this.eventObj.thirdAge == 0) {
         this.eventObj.thirdAge = this.currentAge;
       }
     }
-    if(assetsNum>10**7){
-      if(this.eventObj.secondAge == 0){
+    if (assetsNum > 10 ** 7) {
+      if (this.eventObj.secondAge == 0) {
         this.eventObj.secondAge = this.currentAge;
       }
     }
-    if(assetsNum>10**6){
-      if(this.eventObj.firstAge == 0){
+    if (assetsNum > 10 ** 6) {
+      if (this.eventObj.firstAge == 0) {
         this.eventObj.firstAge = this.currentAge;
       }
     }
-    if(this.eventObj.maxAssets<assetsNum){
+    if (this.eventObj.maxAssets < assetsNum) {
       this.eventObj.maxAssets = assetsNum;
       this.eventObj.maxAssetsAge = this.currentAge;
     }
@@ -129,7 +135,7 @@ export default class GameData extends cc.Component {
     // console.log("####################")
   }
 
-  resetAllData(){
+  resetAllData() {
     this.LastGoodsMarketData = {};
     this.currentGoodsMarketData = {};
     this.currentGoodsList = [];
@@ -140,135 +146,116 @@ export default class GameData extends cc.Component {
     this.totalAssets = 100000;
     this.currentAge = 0;
     this.eventObj = {
-      maxAssets:0,
-      maxAssetsAge:0,
-      firstAge:0,
-      secondAge:0,
-      thirdAge:0,
-      forthAge:0,
-      currentAge:0,
-    }
+      maxAssets: 0,
+      maxAssetsAge: 0,
+      firstAge: 0,
+      secondAge: 0,
+      thirdAge: 0,
+      forthAge: 0,
+      currentAge: 0,
+    };
   }
-  
-  getGobalGoodsSpriteArrItem(goodsId){
-    if(goodsId>=this.GoodsSpriteArr.length){
+
+  getGobalGoodsSpriteArrItem(goodsId) {
+    if (goodsId >= this.GoodsSpriteArr.length) {
       return this.GoodsSpriteArr[0];
     }
     return this.GoodsSpriteArr[goodsId];
   }
 
-  getUserData(){
+  getUserData() {
     return {
-      myCash:this.myCash,
-      totalAssets:this.totalAssets,
-      WareHouseCapcity:this.WareHouseCapcity,
-      myGoodsList:this.myGoodsList,
-      totoalWareHouseCapcity:this.totoalWareHouseCapcity,
-    }
+      myCash: this.myCash,
+      totalAssets: this.totalAssets,
+      WareHouseCapcity: this.WareHouseCapcity,
+      myGoodsList: this.myGoodsList,
+      totoalWareHouseCapcity: this.totoalWareHouseCapcity,
+    };
   }
 
-  currentMarketSaleFlag(goodsId){
-    for(let i=0;i<this.currentGoodsList.length;i++){
-      if(this.currentGoodsList[i].id == goodsId){
+  currentMarketSaleFlag(goodsId) {
+    for (let i = 0; i < this.currentGoodsList.length; i++) {
+      if (this.currentGoodsList[i].id == goodsId) {
         return 1;
       }
     }
     return 0;
   }
 
-  getBuyFlag(goodsId){
+  getBuyFlag(goodsId) {
     let count = 0;
     let inFlag = 0;
-    for(let i=0;i<this.myGoodsList.length;i++){
-      if(this.myGoodsList[i].num >0){
+    for (let i = 0; i < this.myGoodsList.length; i++) {
+      if (this.myGoodsList[i].num > 0) {
         count = count + 1;
       }
-      if(this.myGoodsList[i].id == goodsId){
+      if (this.myGoodsList[i].id == goodsId) {
         inFlag = 1;
       }
     }
-    if(inFlag==1){
+    if (inFlag == 1) {
       return 1;
-    }else{
-      if(count>=5){
+    } else {
+      if (count >= 5) {
         return 0;
-      }else{
+      } else {
         return 1;
       }
     }
   }
 
-
-  refreshMyTotalAssets(){
-    let totalGoodsAssets = 0;
-    for(let i=0;i<this.myGoodsList.length;i++){
-      if(this.myGoodsList[i].num>0){
-        let currentPrice = this.currentGoodsMarketData[this.myGoodsList[i].id].price;
-        totalGoodsAssets = totalGoodsAssets + currentPrice*this.myGoodsList[i].num;
+  updateGoodsMarketData() {
+    let randomArr = [];
+    let count = Math.round(Math.random() * 3) + 3;
+    while (randomArr.length < count) {
+      let id = Math.round(Math.random() * 7);
+      if (this.searchItemInGoodsArr(id, randomArr) == 0) {
+        let price = Math.round(Math.random() * 15562);
+        randomArr.push({
+          id: id,
+          price: price,
+        });
       }
     }
-    this.totalAssets = this.myCash + totalGoodsAssets;
-    this.CashNode.getComponent(cc.Label).string = this.FormatNum(this.myCash);
-    this.TotalAssetsNode.getComponent(cc.Label).string = this.FormatNum(this.totalAssets);
-    if(this.currentAge + 1>=this.totalAge){
-      NodeData.getGameComponent().leaveGame();
-    }else{
-      this.currentAge = this.currentAge + 1;
-      this.AgeNode.getChildByName("yearNum").getComponent(cc.Label).string = this.currentAge + ' / ' + this.totalAge
-    }
-    this.updateEvent(this.totalAssets);
+
+    this.updateGoodsMarketCurrentData(randomArr);
   }
 
-  updateGoodsMarketData(){
-    let randomArr = []
-    let count = Math.round(Math.random()*3) + 3;
-    while(randomArr.length<count){
-        let id = Math.round(Math.random()*7)
-        if(this.searchItemInGoodsArr(id,randomArr)==0){
-            let price = Math.round(Math.random()*15562)
-            randomArr.push({
-                id:id,
-                price:price
-            })
-        }
-    }
-    
-    this.updateGoodsMarketCurrentData(randomArr)
-  }
-
-  updateCurrentMarketTips(data){
-    let marketTipArr = []
-    for(let i=0;i<data.length;i++){
+  updateCurrentMarketTips(data) {
+    let marketTipArr = [];
+    for (let i = 0; i < data.length; i++) {
       let lastPrice = this.LastGoodsMarketData[data[i].id].price;
-      if(lastPrice > 0){
-        if(lastPrice>data[i].price){
-          let lineType = 0;// fall
-          let markertTip = 'The market is stable and prices do not fluctuate much';
-          let rate = (lastPrice-data[i].price)/lastPrice;
-          if(rate>0.5){
-            markertTip = GoodsMarketTips[data[i].id][3]
-          }else{
-            markertTip = GoodsMarketTips[data[i].id][2]
+      if (lastPrice > 0) {
+        if (lastPrice > data[i].price) {
+          let lineType = 0; // fall
+          let markertTip =
+            "The market is stable and prices do not fluctuate much";
+          let rate = (lastPrice - data[i].price) / lastPrice;
+          if (rate > 0.5) {
+            markertTip = GoodsMarketTips[data[i].id][3];
+          } else {
+            markertTip = GoodsMarketTips[data[i].id][2];
           }
           marketTipArr.push({
-            id:data[i].id,
-            lineType:lineType,
-            markertTip:markertTip
-          })
-        }else {
-          let lineType = 1;// rise
-          let markertTip = 'The market is stable and prices do not fluctuate much';
-          let rate = (data[i].price - lastPrice)/lastPrice;
-          if(rate>0.5){
-            markertTip = GoodsMarketTips[data[i].id][0]
-          }else{
-            markertTip = GoodsMarketTips[data[i].id][1]
+            id: data[i].id,
+            lineType: lineType,
+            markertTip: markertTip,
+          });
+        } else {
+          let lineType = 1; // rise
+          let markertTip =
+            "The market is stable and prices do not fluctuate much";
+          let rate = (data[i].price - lastPrice) / lastPrice;
+          if (rate > 0.5) {
+            markertTip = GoodsMarketTips[data[i].id][0];
+          } else {
+            markertTip = GoodsMarketTips[data[i].id][1];
           }
           marketTipArr.push({
-            id:data[i].id,
-            lineType:lineType,
-            markertTip:markertTip
-          })
+            id: data[i].id,
+            lineType: lineType,
+            markertTip: markertTip,
+          });
         }
       }
     }
@@ -276,13 +263,13 @@ export default class GameData extends cc.Component {
     NodeData.getMarketTipPanelComponent().updateMarketTipsList(marketTipArr);
   }
 
-  searchItemInGoodsArr(id,arr){
-      for(let i=0;i<arr.length;i++){
-          if(id == arr[i].id){
-              return 1;
-          }
+  searchItemInGoodsArr(id, arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (id == arr[i].id) {
+        return 1;
       }
-      return 0;
+    }
+    return 0;
   }
 
   // type==0:sell，type==1:bug
@@ -290,16 +277,16 @@ export default class GameData extends cc.Component {
     let priceTmp = this.currentGoodsMarketData[goodsId].price;
     if (type == 0) {
       //sell
-      let index = this.getItemIndexInGoodsArr(goodsId,this.myGoodsList)
-      console.log(index)
-      console.log(this.myGoodsList)
-      console.log(this.myGoodsList[index])
+      let index = this.getItemIndexInGoodsArr(goodsId, this.myGoodsList);
+      console.log(index);
+      console.log(this.myGoodsList);
+      console.log(this.myGoodsList[index]);
       let currentNum = this.myGoodsList[index].num;
-      if(num<=currentNum){
+      if (num <= currentNum) {
         this.myGoodsList[index].num = currentNum - num;
-        this.myCash = this.myCash + num*priceTmp
+        this.myCash = this.myCash + num * priceTmp;
         this.WareHouseCapcity = this.WareHouseCapcity - num;
-        if(num == currentNum){
+        if (num == currentNum) {
           this.myGoodsTypeNum = this.myGoodsTypeNum - 1;
         }
       }
@@ -308,40 +295,44 @@ export default class GameData extends cc.Component {
       if (this.myCash < priceTmp * num) {
         return;
       } else {
-        let cashTmp = this.myCash - priceTmp*num;
-        if(cashTmp<0)return
+        let cashTmp = this.myCash - priceTmp * num;
+        if (cashTmp < 0) return;
         let WareHouseCapcityTmp = this.WareHouseCapcity + num;
-        if(WareHouseCapcityTmp>this.totoalWareHouseCapcity)return
+        if (WareHouseCapcityTmp > this.totoalWareHouseCapcity) return;
         this.myCash = cashTmp;
         this.WareHouseCapcity = WareHouseCapcityTmp;
-        let index = this.getItemIndexInGoodsArr(goodsId,this.myGoodsList)
-        if(index>=0){
+        let index = this.getItemIndexInGoodsArr(goodsId, this.myGoodsList);
+        if (index >= 0) {
           let currentItem = this.myGoodsList[index];
           let totalNum = currentItem.num + num;
-          let rangePriceTmp = Math.ceil((currentItem.num*currentItem.rangePrice+priceTmp*num)/totalNum)
+          let rangePriceTmp = Math.ceil(
+            (currentItem.num * currentItem.rangePrice + priceTmp * num) /
+              totalNum
+          );
           this.myGoodsList[index].rangePrice = rangePriceTmp;
           this.myGoodsList[index].num = totalNum;
-        }else{
+        } else {
           this.myGoodsTypeNum = this.myGoodsTypeNum + 1;
           this.myGoodsList.push({
-            id:goodsId,
-            rangePrice:priceTmp,
-            num:num
-          })
+            id: goodsId,
+            rangePrice: priceTmp,
+            num: num,
+          });
         }
       }
     }
-    this.CashNode.getComponent(cc.Label).string = this.myCash+'';
-    this.TotalAssetsNode.getComponent(cc.Label).string = this.totalAssets+'';
-    this.WareNode.getChildByName("positionNum").getComponent(cc.Label).string = this.WareHouseCapcity + '/' + this.totoalWareHouseCapcity;
-    NodeData.getMyGoodsListComponent().updateMyGoodsList(this.myGoodsList)
+    this.CashNode.getComponent(cc.Label).string = this.myCash + "";
+    this.TotalAssetsNode.getComponent(cc.Label).string = this.totalAssets + "";
+    this.WareNode.getChildByName("positionNum").getComponent(cc.Label).string =
+      this.WareHouseCapcity + "/" + this.totoalWareHouseCapcity;
+    NodeData.getMyGoodsListComponent().updateMyGoodsList(this.myGoodsList);
   }
 
-  getItemIndexInGoodsArr(id,arr){
-    for(let i=0;i<arr.length;i++){
-        if(id == arr[i].id){
-            return i;
-        }
+  getItemIndexInGoodsArr(id, arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (id == arr[i].id) {
+        return i;
+      }
     }
     return -1;
   }
@@ -355,7 +346,7 @@ export default class GameData extends cc.Component {
         };
       }
     } else {
-      console.log("updateLastGoodsMarketData.. ");
+      // console.log("updateLastGoodsMarketData.. ");
       this.updateLastGoodsMarketData();
     }
     for (let i = 0; i < data.length; i++) {
@@ -366,13 +357,46 @@ export default class GameData extends cc.Component {
     }
     // console.log(this.currentGoodsList)
     // console.log(data)
-    console.log("LastGoodsMarketData:", this.LastGoodsMarketData);
+    // console.log("LastGoodsMarketData:", this.LastGoodsMarketData);
     // console.log("currentGoodsMarketData:",this.currentGoodsMarketData)
     this.currentGoodsList = data;
-    this.updateCurrentMarketTips(data);
-    NodeData.getMarketGoodsListComponent().updateMarketGoodsList(data)
+  }
+
+  calTotalGoodsAssets() {
+    let totalGoodsAssets = 0;
+    for (let i = 0; i < this.myGoodsList.length; i++) {
+      if (this.myGoodsList[i].num > 0) {
+        let currentPrice =
+          this.currentGoodsMarketData[this.myGoodsList[i].id].price;
+        totalGoodsAssets =
+          totalGoodsAssets + currentPrice * this.myGoodsList[i].num;
+      }
+    }
+    return totalGoodsAssets;
+  }
+
+  refreshMyTotalAssets() {
+    let totalGoodsAssets = this.calTotalGoodsAssets();
+    this.totalAssets = this.myCash + totalGoodsAssets;
+    this.CashNode.getComponent(cc.Label).string = this.FormatNum(this.myCash);
+    this.TotalAssetsNode.getComponent(cc.Label).string = this.FormatNum(
+      this.totalAssets
+    );
+    if (this.currentAge + 1 >= this.totalAge) {
+      NodeData.getGameComponent().leaveGame();
+    } else {
+      this.currentAge = this.currentAge + 1;
+      this.AgeNode.getChildByName("yearNum").getComponent(cc.Label).string =
+        this.currentAge + " / " + this.totalAge;
+    }
+    this.updateEvent(this.totalAssets);
+  }
+
+  updateGoodsMarketCurrentUI() {
+    this.updateCurrentMarketTips(this.currentGoodsList);
+    NodeData.getMarketGoodsListComponent().updateMarketGoodsList(this.currentGoodsList);
     // update total assets
-    this.refreshMyTotalAssets()
+    this.refreshMyTotalAssets();
   }
 
   updateLastGoodsMarketData() {
@@ -390,7 +414,7 @@ export default class GameData extends cc.Component {
   }
 
   getCurrentMarketGoodsPriceById(GoodsId) {
-    console.log(this.currentGoodsMarketData)
+    // console.log(this.currentGoodsMarketData);
     return this.currentGoodsMarketData[GoodsId].price;
   }
 
@@ -404,21 +428,33 @@ export default class GameData extends cc.Component {
     return this.currentGoodsMarketData[GoodsId];
   }
 
-  FormatNum(num){
-    num = num +'';
+  getCurrentGoodsList() {
+    return this.currentGoodsList;
+  }
+
+  getMyGoodsList() {
+    return this.myGoodsList;
+  }
+
+  getMyCash() {
+    return this.myCash;
+  }
+
+
+  FormatNum(num) {
+    num = num + "";
     var str = "";
-    for(var i=num.length- 1,j=1;i>=0;i--,j++){  
-        if(j%3==0 && i!=0){
-            str+=num[i]+",";
-            continue;  
-        }  
-        str+=num[i];
-    }  
-    var out = str.split('').reverse().join("");
-    if(out[0] == ',')
-        return out.slice(0,1)
+    for (var i = num.length - 1, j = 1; i >= 0; i--, j++) {
+      if (j % 3 == 0 && i != 0) {
+        str += num[i] + ",";
+        continue;
+      }
+      str += num[i];
+    }
+    var out = str.split("").reverse().join("");
+    if (out[0] == ",") return out.slice(0, 1);
     return out;
-}
+  }
 
   // update (dt) {}
 }

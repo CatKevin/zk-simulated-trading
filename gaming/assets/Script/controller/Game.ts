@@ -10,6 +10,24 @@ export default class Game extends cc.Component {
         NodeData.getGameDataComponent().updateGoodsMarketData()
     }
 
+        
+    createProof(onOK?: Function) {
+        // TODO
+        // just update market data
+        NodeData.getGameDataComponent().updateGoodsMarketData();
+        let currentGoodsList = NodeData.getGameDataComponent().getCurrentGoodsList();
+        let myGoodsList = NodeData.getGameDataComponent().getMyGoodsList();
+        let totalGoodsAssets = NodeData.getGameDataComponent().calTotalGoodsAssets();
+        let myCash = NodeData.getGameDataComponent().getMyCash();
+        // console.log('currentGoodsList:', currentGoodsList);
+        // console.log('myGoodsList:', myGoodsList);
+        // console.log('totalGoodsAssets:', totalGoodsAssets);
+        // console.log('myCash:', myCash);
+        const proof_input = '{"X": 32, "Y": 32}';
+        // onOK: update UI
+        this.node.getComponent("web3").createProof(proof_input, onOK);
+    }
+
     openMarketTipListPanel(){
         NodeData.getMarketTipPanelComponent().openNode();
     }

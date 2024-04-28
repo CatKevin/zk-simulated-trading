@@ -6,9 +6,7 @@ const qs = require("querystring");
 
 import NodeData from "./../../data/NodeData";
 
-const bearer_token = "sindri_api_token";
-const circuit_id = "your circuit id";
-const proof_input = 'your proof input';
+import { BEARER_TOKEN, CIRCUIT_ID } from "./config.js";
 
 @ccclass
 export default class Web3Class extends cc.Component {
@@ -57,19 +55,20 @@ export default class Web3Class extends cc.Component {
   }
 
   // create proof using Nori to create proof on Sindri server and get proof from Sindri
-  async createProof() {
+  async createProof(proof_input: String, onOK?: Function) {
     const onError = (error) => {
       console.log(error);
     };
     let my = this;
     await this.createProofForCircuit(
-      bearer_token,
-      circuit_id,
+      BEARER_TOKEN,
+      CIRCUIT_ID,
       proof_input,
       async (res) => {
-        console.log('res', res);
-        const resp = await my.onListenProofCreate(res['proof_id'], onError)
-        console.log('resp', resp)
+        console.log("res", res);
+        const resp = await my.onListenProofCreate(res["proof_id"], onError);
+        console.log("resp", resp);
+        onOK();
       },
       onError
     );
@@ -80,28 +79,30 @@ export default class Web3Class extends cc.Component {
     let response;
     while (true) {
       this.getSindriProofDetail(
-        bearer_token,
+        BEARER_TOKEN,
         proof_id,
         (res) => {
           response = res;
         },
         onError
       );
-      if ( response != null && (response['status'] === "Ready" || response['status'] === "Failed")) {
+      if (
+        response != null &&
+        (response["status"] === "Ready" || response["status"] === "Failed")
+      ) {
         break;
       }
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
     return response;
-  
   }
 
   // create proof on Sindri
   // note: The game engine does not support NodeJS, so I used this native writing method.
   async createProofForCircuit(
-    bearer_token: String,
-    circuit_id: String,
+    BEARER_TOKEN: String,
+    CIRCUIT_ID: String,
     proof_input: String, // eg. proof_input: '{"X": 52, "Y": 52}'
     onOK?: Function,
     onError?: Function
@@ -109,11 +110,11 @@ export default class Web3Class extends cc.Component {
     let options = {
       method: "POST",
       hostname: "sindri.app",
-      path: "/api/v1/circuit/" + circuit_id + "/prove",
+      path: "/api/v1/circuit/" + CIRCUIT_ID + "/prove",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
-        Authorization: "Bearer " + bearer_token,
+        Authorization: "Bearer " + BEARER_TOKEN,
       },
       maxRedirects: 20,
     };
@@ -147,7 +148,7 @@ export default class Web3Class extends cc.Component {
   // get proof from Sindri
   // note: The game engine does not support NodeJS, so I used this native writing method.
   async getSindriProofDetail(
-    bearer_token: String,
+    BEARER_TOKEN: String,
     proof_id: String,
     onOK?: Function,
     onError?: Function
@@ -158,7 +159,7 @@ export default class Web3Class extends cc.Component {
       path: "/api/v1/proof/" + proof_id + "/detail",
       headers: {
         Accept: "application/json",
-        Authorization: "Bearer " + bearer_token,
+        Authorization: "Bearer " + BEARER_TOKEN,
       },
       maxRedirects: 20,
     };
