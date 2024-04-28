@@ -168,7 +168,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 245.939716971851
+      "z": 245.94629871229242
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -971,7 +971,7 @@
       "__id__": 21
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_level": 2,
     "_components": [
       {
@@ -1146,7 +1146,7 @@
       "__id__": 21
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_level": 2,
     "_components": [
       {
@@ -1321,7 +1321,7 @@
       "__id__": 21
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_level": 2,
     "_components": [
       {

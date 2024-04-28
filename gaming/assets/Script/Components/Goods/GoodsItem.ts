@@ -28,7 +28,6 @@ export default class GoodsItem extends cc.Component {
     this.GoodsPrice.getComponent(cc.Label).string = goodsPrice;
     this.price = goodsPrice
     let lastPrice = NodeData.getGameDataComponent().getLastMarketGoodsPriceById(goodsId);
-    console.log(lastPrice)
     if(lastPrice == 0){
         // init
         this.GoodsRate.getComponent(cc.Label).string = "0.00%"

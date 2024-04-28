@@ -5,11 +5,35 @@ const fs = require("fs");
 const qs = require("querystring");
 
 import NodeData from "./../../data/NodeData";
+import { VerifyABI } from "./VerifyABI";
+import {
+  infuraUri,
+  networkParams,
+  VERIFY_CONTRACT_ADDRESS,
+  BEARER_TOKEN,
+  CIRCUIT_ID,
+} from "./config.js";
 
-import { BEARER_TOKEN, CIRCUIT_ID } from "./config.js";
+declare global {
+  interface Window {
+    ethereum?: any;
+    web3?: any;
+  }
+}
+
+const WinEthereum = window.ethereum;
+const WinWeb3 = window.web3;
 
 @ccclass
 export default class Web3Class extends cc.Component {
+  private web3Provider;
+  private switchChainFlag = 0;
+  private contractsInitFlag = 0;
+  private web3;
+
+  private VerifyContract;
+  private _lastProof;
+
   public currentAccount = null;
 
   async onLoad() {
@@ -17,7 +41,85 @@ export default class Web3Class extends cc.Component {
   }
 
   async InitWeb3() {
-    // TODO
+    let my = this;
+    let checkMetaMaskFlag = await this.checkMetaMask();
+    if (checkMetaMaskFlag) {
+      let switchFlag = await this.switch();
+      if (switchFlag) {
+        let setWeb3ProviderFlag = await this.setWeb3Provider();
+        if (setWeb3ProviderFlag) {
+          console.log(this.web3Provider);
+          this.web3 = await new Web3(this.web3Provider);
+
+          let accounts = await this.web3.eth.getAccounts();
+          console.log(accounts);
+          if (accounts.length == 0) {
+            return;
+          }
+          this.currentAccount = accounts[0];
+          await this.web3.eth.getBalance(accounts[0], (err, wei) => {
+            if (!err) {
+              let balance = my.web3.utils.fromWei(wei, "ether");
+              console.log("balance:", balance);
+              console.log("web3Provider:", my.web3Provider);
+              console.log("switchChainFlag:", my.switchChainFlag);
+              console.log("web3:", my.web3);
+              my.initContracts();
+              if (my.node.getComponent("Loading")) {
+                my.node.getComponent("Loading").showStart();
+              }
+              // NodeData.getCanvasNode().getComponent("Loading").showStart();
+            }
+          });
+          WinEthereum.on("accountsChanged", function (accounts) {
+            if (accounts.length == 0) {
+              return;
+            }
+            console.log(accounts[0]);
+            my.currentAccount = accounts[0];
+            my.web3.eth.getBalance(accounts[0], (err, wei) => {
+              if (!err) {
+                let balance = my.web3.utils.fromWei(wei, "ether");
+                console.log("balance:", balance);
+              }
+            });
+          });
+        } else {
+          console.log("setWeb3Provider error");
+        }
+      } else {
+        console.log("switch chain failed");
+      }
+    } else {
+      console.log("checkMetaMask error");
+    }
+  }
+
+  initContracts() {
+    this.VerifyContract = new this.web3.eth.Contract(
+      VerifyABI,
+      VERIFY_CONTRACT_ADDRESS
+    );
+    this.contractsInitFlag = 1;
+  }
+
+  async verifyProof(totalAssets, onOk?: Function) {
+    if (this._lastProof != null) {
+      let hexString = totalAssets.toString(16);
+      let publicInputs = "0x" + hexString.padStart(64, "0");
+      let resp = await this.VerifyContract.methods
+        .verify(this._lastProof, [publicInputs])
+        .call();
+      if(resp) {
+        console.log('publicInputs:',[publicInputs])
+        console.log("Verify data successful!")
+        onOk != null && onOk();
+      } else {
+        console.log("Verify data failed!")
+      }
+    } else {
+      onOk != null && onOk();
+    }
   }
 
   async StartGame() {
@@ -68,6 +170,10 @@ export default class Web3Class extends cc.Component {
         console.log("res", res);
         const resp = await my.onListenProofCreate(res["proof_id"], onError);
         console.log("resp", resp);
+        if (resp != null) {
+          my._lastProof = "0x" + resp["proof"]["proof"];
+          console.log(my._lastProof);
+        }
         onOK();
       },
       onError
@@ -182,5 +288,79 @@ export default class Web3Class extends cc.Component {
     });
 
     req.end();
+  }
+
+  // metamask
+
+  async checkMetaMask() {
+    if (WinEthereum) {
+      if (typeof WinEthereum !== "undefined") {
+        console.log("MetaMask is installed!");
+        return true;
+      } else {
+        console.log("MetaMask is not installed!");
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  async setWeb3Provider() {
+    if (WinEthereum) {
+      this.web3Provider = WinEthereum;
+      try {
+        await WinEthereum.enable();
+      } catch (error) {
+        console.error("User denied account access");
+        return false;
+      }
+    } else if (WinWeb3) {
+      this.web3Provider = WinWeb3.currentProvider;
+    } else {
+      this.web3Provider = new Web3.providers.HttpProvider(infuraUri);
+    }
+    return true;
+  }
+
+  async switch() {
+    console.log(WinEthereum.chainId);
+    if (WinEthereum.chainId == 0x8274f) {
+      return true;
+    }
+    return await this.switchChain(networkParams);
+  }
+
+  async switchChain(data) {
+    try {
+      let { chainId } = data;
+      await WinEthereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId }],
+      });
+      return true;
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      console.log(switchError);
+      if (switchError.code === 4902) {
+        return await this.addChain(data);
+      }
+      return false;
+      // handle other "switch" errors
+    }
+  }
+
+  async addChain(data) {
+    try {
+      await WinEthereum.request({
+        method: "wallet_addEthereumChain",
+        params: [data],
+      });
+      return true;
+    } catch (addError) {
+      console.log(addError);
+      return false;
+      // handle "add" error
+    }
   }
 }

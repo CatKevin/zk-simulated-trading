@@ -18,7 +18,9 @@ export default class GoToNextYearTip extends cc.Component {
     }
 
     OpenGoToNextYearTip(){
-        this.NextYearTip.active = true;
+        NodeData.getGameComponent().verifyProofOnContract(() => {
+            this.NextYearTip.active = true;
+        });
     }
 
     ClosePanel(){
