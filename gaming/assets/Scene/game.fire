@@ -171,7 +171,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 245.939716971851
+      "z": 339.47041248410426
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -12998,8 +12998,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "You can use 0.02ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
-    "_N$string": "You can use 0.02ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
+    "_string": "You can use 0.01ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
+    "_N$string": "You can use 0.01ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,

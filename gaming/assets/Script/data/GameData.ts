@@ -366,8 +366,13 @@ export default class GameData extends cc.Component {
     let totalGoodsAssets = 0;
     for (let i = 0; i < this.myGoodsList.length; i++) {
       if (this.myGoodsList[i].num > 0) {
-        let currentPrice =
-          this.currentGoodsMarketData[this.myGoodsList[i].id].price;
+        let currentPrice = this.myGoodsList[i].rangePrice;
+        for(let k=0; k<this.currentGoodsList.length;k++) {
+          let item = this.currentGoodsList[k];
+          if(item.id == this.myGoodsList[i].id) {
+            currentPrice = item.price;
+          }
+        }
         totalGoodsAssets =
           totalGoodsAssets + currentPrice * this.myGoodsList[i].num;
       }
@@ -387,7 +392,7 @@ export default class GameData extends cc.Component {
     } else {
       this.currentAge = this.currentAge + 1;
       this.AgeNode.getChildByName("yearNum").getComponent(cc.Label).string =
-        this.currentAge + " / " + this.totalAge;
+        this.currentAge + " / " + (this.totalAge -1);
     }
     this.updateEvent(this.totalAssets);
   }
@@ -414,7 +419,6 @@ export default class GameData extends cc.Component {
   }
 
   getCurrentMarketGoodsPriceById(GoodsId) {
-    // console.log(this.currentGoodsMarketData);
     return this.currentGoodsMarketData[GoodsId].price;
   }
 

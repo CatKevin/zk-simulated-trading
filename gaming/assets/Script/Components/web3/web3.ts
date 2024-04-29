@@ -6,9 +6,11 @@ const qs = require("querystring");
 
 import NodeData from "./../../data/NodeData";
 import { VerifyABI } from "./VerifyABI";
+import { GameABI } from "./GameABI";
 import {
   infuraUri,
   networkParams,
+  GAME_CONTRACT_ADDRESS,
   VERIFY_CONTRACT_ADDRESS,
   BEARER_TOKEN,
   CIRCUIT_ID,
@@ -27,10 +29,9 @@ const WinWeb3 = window.web3;
 @ccclass
 export default class Web3Class extends cc.Component {
   private web3Provider;
-  private switchChainFlag = 0;
-  private contractsInitFlag = 0;
   private web3;
 
+  private GameContract;
   private VerifyContract;
   private _lastProof;
 
@@ -62,7 +63,6 @@ export default class Web3Class extends cc.Component {
               let balance = my.web3.utils.fromWei(wei, "ether");
               console.log("balance:", balance);
               console.log("web3Provider:", my.web3Provider);
-              console.log("switchChainFlag:", my.switchChainFlag);
               console.log("web3:", my.web3);
               my.initContracts();
               if (my.node.getComponent("Loading")) {
@@ -100,7 +100,10 @@ export default class Web3Class extends cc.Component {
       VerifyABI,
       VERIFY_CONTRACT_ADDRESS
     );
-    this.contractsInitFlag = 1;
+    this.GameContract = new this.web3.eth.Contract(
+      GameABI,
+      GAME_CONTRACT_ADDRESS
+    );
   }
 
   async verifyProof(totalAssets, onOk?: Function) {
@@ -123,45 +126,99 @@ export default class Web3Class extends cc.Component {
   }
 
   async StartGame() {
-    // TODO
-    cc.director.loadScene("game");
+    let my = this;
+    if (this.GameContract) {
+      this.GameContract.methods
+        .startGame()
+        .send({
+          from: my.currentAccount,
+          value: my.web3.utils.toWei("0.005", "ether"),
+        })
+        .on("receipt", function (receipt) {
+          console.log(receipt);
+          cc.director.loadScene('game');
+        })
+        .on("error", function (error) {
+          console.log(error);
+          alert("start game failed！")
+        });
+    }
   }
 
   async ExpandCap() {
-    // TODO
-    NodeData.getGameDataComponent().expandCapcityByETH();
+    let my = this;
+    if (this.GameContract) {
+      this.GameContract.methods
+        .expand()
+        .send({
+          from: my.currentAccount,
+          value: my.web3.utils.toWei("0.01", "ether"),
+        })
+        .on("receipt", function (receipt) {
+          console.log(receipt);
+          NodeData.getGameDataComponent().expandCapcityByETH();
+        })
+        .on("error", function (error) {
+          console.log(error);
+        });
+    }
   }
 
   async getTopPlayerCall() {
-    // TODO
+    if (this.GameContract) {
+      let result = await this.GameContract.methods.getTopPlayer().call();
+      console.log(result)
+    }
   }
 
   async totalBlockCall() {
-    // TODO
+    if (this.GameContract) {
+      let result = await this.GameContract.methods.totalBlock().call();
+      console.log(result)
+    }
   }
 
   async getRankData() {
-    // TODO
     let data = {
       block: "BLOCK:0",
       address: "ADDRESS:0x00000000000001",
       grade: "Grade:99325525",
     };
+    if (this.GameContract) {
+      let block = await this.GameContract.methods.totalBlock().call();
+      let result = await this.GameContract.methods.getTopPlayer().call();
+      data.block = 'BLOCK:' + block;
+      data.address = 'ADDRESS:' + result[0];
+      data.grade = 'Grade:' + result[1];
+    }
     return data;
   }
 
-  async postGrade(grade) {
-    // TODO
-    NodeData.getGameDataComponent().resetAllData();
-    NodeData.getLeavePanelComponent().ClosePanel();
+  async gameOver(grade) {
+    let my = this;
+    let verificationKeyHash = await this.VerifyContract.methods
+        .getVerificationKeyHash()
+        .call();
+    this.GameContract.methods
+      .gameOver(verificationKeyHash, my._lastProof, grade)
+      .send({ from: my.currentAccount })
+      .on("receipt", function (receipt) {
+        NodeData.getGameDataComponent().resetAllData()
+        NodeData.getLeavePanelComponent().ClosePanel();
+      })
+      .on("error", function (error) {
+        alert("Verify failed！")
+      });
   }
 
   // create proof using Nori to create proof on Sindri server and get proof from Sindri
   async createProof(proof_input: String, onOK?: Function) {
     const onError = (error) => {
       console.log(error);
+      console.log('############ create proof failed ##################')
     };
     let my = this;
+    console.log('############ create proof via Sindri ... ##################')
     await this.createProofForCircuit(
       BEARER_TOKEN,
       CIRCUIT_ID,

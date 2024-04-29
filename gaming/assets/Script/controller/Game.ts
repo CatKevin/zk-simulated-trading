@@ -27,6 +27,11 @@ export default class Game extends cc.Component {
         let myGoodsList = NodeData.getGameDataComponent().getMyGoodsList();
         let totalGoodsAssets = NodeData.getGameDataComponent().calTotalGoodsAssets();
         let myCash = NodeData.getGameDataComponent().getMyCash();
+        // console.log('currentGoodsList:', currentGoodsList)
+        // console.log('myGoodsList:', myGoodsList)
+        // console.log('totalGoodsAssets:', totalGoodsAssets)
+        // console.log('myCash:', myCash)
+        // console.log('total-game:', totalGoodsAssets + myCash)
         for(let i=0; i<currentGoodsList.length;i++){
             let item = currentGoodsList[i];
             price[item['id']] = item['price'];
@@ -38,6 +43,7 @@ export default class Game extends cc.Component {
             }
             positions[item['id']] = item['num'];
         }
+
         const proof_input_obj = {
             "price": price,
             "positions": positions,
@@ -47,7 +53,6 @@ export default class Game extends cc.Component {
         console.log(proof_input_obj)
 
         const proof_input = JSON.stringify(proof_input_obj);
-        // const proof_input = '{"X": 32, "Y": 32}';
         // onOK: update UI
         this.node.getComponent("web3").createProof(proof_input, onOK);
     }
@@ -71,7 +76,7 @@ export default class Game extends cc.Component {
 
     returnToLoading(){
         let grade =  NodeData.getGameDataComponent().getUserCurrentAssets()
-        this.node.getComponent("web3").postGrade(grade.totalAssets);
+        this.node.getComponent("web3").gameOver(grade.totalAssets);
     }
 
     expandByETH(){

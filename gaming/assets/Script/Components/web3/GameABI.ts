@@ -1,4 +1,4 @@
-export const VerifyABI = [
+export const GameABI = [
     {
         "inputs": [
             {

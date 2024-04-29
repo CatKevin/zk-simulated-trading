@@ -168,7 +168,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 245.94629871229242
+      "z": 353.33063564829615
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -2070,7 +2070,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 540,
+      "width": 550,
       "height": 250.39999999999998
     },
     "_anchorPoint": {
@@ -2116,8 +2116,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "To participate in the game, you need to pay 0.05ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
-    "_N$string": "To participate in the game, you need to pay 0.05ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
+    "_string": "To participate in the game, you need to pay 0.005ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
+    "_N$string": "To participate in the game, you need to pay 0.005ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
