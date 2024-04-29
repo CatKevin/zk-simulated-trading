@@ -1,0 +1,19 @@
+{
+  "name": "nori-min",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build" : "esbuild src/index.ts --bundle --outfile=nori-tool.min.js --format=esm",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "0.20.2",
+    "typescript": "^5.4.5",
+    "@noir-lang/backend_barretenberg": "^0.25.0",
+    "@noir-lang/noir_js": "^0.25.0",
+    "@noir-lang/noir_wasm": "^0.25.0"
+  }
+}
