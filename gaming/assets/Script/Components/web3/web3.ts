@@ -36,6 +36,8 @@ export default class Web3Class extends cc.Component {
 
   public currentAccount = null;
 
+  private btcPrice = 50000;
+
   async onLoad() {
     await this.InitWeb3();
   }
@@ -57,13 +59,13 @@ export default class Web3Class extends cc.Component {
             return;
           }
           this.currentAccount = accounts[0];
-          await this.web3.eth.getBalance(accounts[0], (err, wei) => {
+          await this.web3.eth.getBalance(accounts[0],async (err, wei) => {
             if (!err) {
               let balance = my.web3.utils.fromWei(wei, "ether");
               console.log("balance:", balance);
               console.log("web3Provider:", my.web3Provider);
               console.log("web3:", my.web3);
-              my.initContracts();
+              await my.initContracts();
               if (my.node.getComponent("Loading")) {
                 my.node.getComponent("Loading").showStart();
               }
@@ -94,7 +96,7 @@ export default class Web3Class extends cc.Component {
     }
   }
 
-  initContracts() {
+  async initContracts() {
     this.VerifyContract = new this.web3.eth.Contract(
       VerifyABI,
       VERIFY_CONTRACT_ADDRESS
@@ -103,6 +105,7 @@ export default class Web3Class extends cc.Component {
       GameABI,
       GAME_CONTRACT_ADDRESS
     );
+    await this.getCurrentPlayerChainlinkDataFeedPrice();
   }
 
   async verifyProof(totalAssets, onOk?: Function) {
@@ -127,11 +130,15 @@ export default class Web3Class extends cc.Component {
   async StartGame() {
     let my = this;
     if (this.GameContract) {
-      this.GameContract.methods
+      // pay $2
+      let ethAmount = await this.GameContract.methods.calUsdToEthAmount(2).call();
+      console.log('ethAmount：',ethAmount)
+      if(ethAmount > 0) {
+        await this.GameContract.methods
         .startGame()
         .send({
           from: my.currentAccount,
-          value: my.web3.utils.toWei("0.005", "ether"),
+          value: ethAmount,
         })
         .on("receipt", function (receipt) {
           console.log(receipt);
@@ -139,15 +146,22 @@ export default class Web3Class extends cc.Component {
         })
         .on("error", function (error) {
           console.log(error);
-          alert("start game failed！")
+          alert("start game failed！");
         });
+      } else {
+        alert("start game failed！");
+      }
     }
   }
 
   async expandCap() {
     let my = this;
     if (this.GameContract) {
-      this.GameContract.methods
+      // pay $10
+      let ethAmount = await this.GameContract.methods.calUsdToEthAmount(10).call();
+      console.log('ethAmount：',ethAmount)
+      if(ethAmount > 0) {
+        this.GameContract.methods
         .expand()
         .send({
           from: my.currentAccount,
@@ -159,8 +173,29 @@ export default class Web3Class extends cc.Component {
         })
         .on("error", function (error) {
           console.log(error);
+          alert("expand it failed！");
         });
+      } else {
+        alert("expand it failed！");
+      }
     }
+  }
+
+  async getCurrentPlayerChainlinkDataFeedPrice() {
+    if(this.GameContract) {
+      let res = await this.GameContract.methods.getCurrentPlayerDataFeedPrice(this.currentAccount).call();
+      // console.log(res)
+      
+      if( res[0]) {
+        let btc = res[0]/100000000;
+        // console.log('btc:', btc);
+        this.btcPrice = btc;
+      }
+    }
+  }
+
+  getBtcPrice() {
+    return this.btcPrice;
   }
 
   async getTopPlayerCall() {

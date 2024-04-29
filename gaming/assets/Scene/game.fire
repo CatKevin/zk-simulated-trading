@@ -171,7 +171,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 353.32921482757666
+      "z": 303.8774994420114
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -13001,8 +13001,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "You can use 0.01ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
-    "_N$string": "You can use 0.01ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
+    "_string": "You can pay $10 ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
+    "_N$string": "You can pay $10 ETH or 50% of total assets to expand 10 positions! When using cash, you need to ensure that you have sufficient cash, otherwise you will not be able to expand! The maximum number of positions is 200!",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -16487,6 +16487,16 @@
     "_id": "6f5cteKmlPh6NGUsUqxlFR"
   },
   {
+    "__type__": "e38dcp+z29A5Y2yPg9L59sZ",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "_id": "c5VCf6DM5FSbmKtki+FbTi"
+  },
+  {
     "__type__": "5d139uOyl1GRJfURvsG+0Y9",
     "_name": "",
     "_objFlags": 0,
@@ -16549,16 +16559,6 @@
       }
     ],
     "_id": "b6R+gPi9JF37ozIVVaT8Px"
-  },
-  {
-    "__type__": "e38dcp+z29A5Y2yPg9L59sZ",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "_id": "c5VCf6DM5FSbmKtki+FbTi"
   },
   {
     "__type__": "30911wog4tDhpFfeW+pXXL8",

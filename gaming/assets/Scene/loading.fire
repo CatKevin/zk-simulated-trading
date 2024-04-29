@@ -2116,8 +2116,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "To participate in the game, you need to pay 0.005ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
-    "_N$string": "To participate in the game, you need to pay 0.005ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
+    "_string": "To participate in the game, you need to pay $2 ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
+    "_N$string": "To participate in the game, you need to pay $2 ETH as the registration fee! After each season, the top player will receive a large amount of ETH!",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,

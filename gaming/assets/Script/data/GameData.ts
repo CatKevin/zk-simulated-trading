@@ -217,11 +217,23 @@ export default class GameData extends cc.Component {
     while (randomArr.length < count) {
       let id = Math.round(Math.random() * 7);
       if (this.searchItemInGoodsArr(id, randomArr) == 0) {
-        let price = Math.round(Math.random() * 15562);
-        randomArr.push({
-          id: id,
-          price: price,
-        });
+        if(id == 1) {
+          let btcPrice = this.node.getComponent("web3").getBtcPrice();
+          if(!btcPrice){
+            btcPrice = 50000;
+          }
+          let price = Math.round(Math.random() * btcPrice);
+          randomArr.push({
+            id: id,
+            price: price,
+          });
+        } else {
+          let price = Math.round(Math.random() * 15770);
+          randomArr.push({
+            id: id,
+            price: price,
+          });
+        }
       }
     }
 
