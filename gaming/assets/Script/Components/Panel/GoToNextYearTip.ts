@@ -11,6 +11,10 @@ export default class GoToNextYearTip extends cc.Component {
     @property(cc.Node)
     private clockNode: cc.Node;
 
+    OpenPanel(){
+        this.node.active = true;
+    }
+
     comfirm(){
         this.node.active = false;
         this.clockNode.active = true;

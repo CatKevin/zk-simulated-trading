@@ -51,7 +51,7 @@ export default class NodeData{
         return cc.find("Canvas/TipNode/leavePanel").getComponent("LeavePanel");
     }
 
-    public static getExpandCapcityPanelComponent(){
+    public static getExpandCapPanelComponent(){
         return cc.find("Canvas/TipNode/expandCapcityPanel").getComponent("expandCapcityPanel");
     }
 

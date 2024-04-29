@@ -17,6 +17,12 @@ export default class GameData extends cc.Component {
   @property(cc.Node)
   private AgeNode: cc.Node = null;
 
+  @property(cc.Node)
+  private NextYearBtnNode: cc.Node = null;
+
+  @property(cc.Node)
+  private EndGameBtnNode: cc.Node = null;
+
   @property([cc.SpriteFrame])
   private GoodsSpriteArr: Array<cc.SpriteFrame> = [];
 
@@ -32,7 +38,7 @@ export default class GameData extends cc.Component {
   private WareHouseCapcity = 0;
   private totoalWareHouseCapcity = 100;
   private currentAge = 0;
-  private totalAge = 10;
+  private totalAge = 3;
   private maxTotoalWareHouseCapcity = 200;
 
   private eventObj = {
@@ -84,10 +90,11 @@ export default class GameData extends cc.Component {
     }
   }
 
-  expandCapcityByETH() {
+  expandCapByETH() {
     this.totoalWareHouseCapcity = this.totoalWareHouseCapcity + 10;
     this.WareNode.getChildByName("positionNum").getComponent(cc.Label).string =
       this.WareHouseCapcity + "/" + this.totoalWareHouseCapcity;
+    NodeData.getExpandCapPanelComponent().ClosePanel();
   }
 
   getUserCurrentAssets() {
@@ -367,9 +374,9 @@ export default class GameData extends cc.Component {
     for (let i = 0; i < this.myGoodsList.length; i++) {
       if (this.myGoodsList[i].num > 0) {
         let currentPrice = this.myGoodsList[i].rangePrice;
-        for(let k=0; k<this.currentGoodsList.length;k++) {
+        for (let k = 0; k < this.currentGoodsList.length; k++) {
           let item = this.currentGoodsList[k];
-          if(item.id == this.myGoodsList[i].id) {
+          if (item.id == this.myGoodsList[i].id) {
             currentPrice = item.price;
           }
         }
@@ -388,18 +395,21 @@ export default class GameData extends cc.Component {
       this.totalAssets
     );
     if (this.currentAge + 1 >= this.totalAge) {
-      NodeData.getGameComponent().leaveGame();
-    } else {
-      this.currentAge = this.currentAge + 1;
-      this.AgeNode.getChildByName("yearNum").getComponent(cc.Label).string =
-        this.currentAge + " / " + (this.totalAge -1);
+      // NodeData.getGameComponent().leaveGame();
+      this.NextYearBtnNode.getComponent("GoToNextYearTip").ClosePanel();
+      this.EndGameBtnNode.getComponent("EndGameTip").OpenPanel();
     }
+    this.currentAge = this.currentAge + 1;
+    this.AgeNode.getChildByName("yearNum").getComponent(cc.Label).string =
+      this.currentAge + " / " + this.totalAge;
     this.updateEvent(this.totalAssets);
   }
 
   updateGoodsMarketCurrentUI() {
     this.updateCurrentMarketTips(this.currentGoodsList);
-    NodeData.getMarketGoodsListComponent().updateMarketGoodsList(this.currentGoodsList);
+    NodeData.getMarketGoodsListComponent().updateMarketGoodsList(
+      this.currentGoodsList
+    );
     // update total assets
     this.refreshMyTotalAssets();
   }
@@ -443,7 +453,6 @@ export default class GameData extends cc.Component {
   getMyCash() {
     return this.myCash;
   }
-
 
   FormatNum(num) {
     num = num + "";

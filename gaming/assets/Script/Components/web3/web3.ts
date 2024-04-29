@@ -145,7 +145,7 @@ export default class Web3Class extends cc.Component {
     }
   }
 
-  async ExpandCap() {
+  async expandCap() {
     let my = this;
     if (this.GameContract) {
       this.GameContract.methods
@@ -156,7 +156,7 @@ export default class Web3Class extends cc.Component {
         })
         .on("receipt", function (receipt) {
           console.log(receipt);
-          NodeData.getGameDataComponent().expandCapcityByETH();
+          NodeData.getGameDataComponent().expandCapByETH();
         })
         .on("error", function (error) {
           console.log(error);

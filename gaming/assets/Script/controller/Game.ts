@@ -71,7 +71,7 @@ export default class Game extends cc.Component {
     }
 
     openExpandPanel(){
-        NodeData.getExpandCapcityPanelComponent().openPanel();
+        NodeData.getExpandCapPanelComponent().openPanel();
     }
 
     returnToLoading(){
@@ -81,7 +81,7 @@ export default class Game extends cc.Component {
 
     expandByETH(){
         NodeData.getGameDataComponent().flagExpand();
-        this.node.getComponent("web3").ExpandCap();
+        this.node.getComponent("web3").expandCap();
     }
     // update (dt) {}
 }
