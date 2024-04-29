@@ -1,7 +1,6 @@
 const { ccclass, property } = cc._decorator;
 const Web3 = require("web3/dist/web3.min.js");
 const https = require("follow-redirects").https;
-const fs = require("fs");
 const qs = require("querystring");
 
 import NodeData from "./../../data/NodeData";

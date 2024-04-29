@@ -38,7 +38,7 @@ export default class GameData extends cc.Component {
   private WareHouseCapcity = 0;
   private totoalWareHouseCapcity = 100;
   private currentAge = 0;
-  private totalAge = 3;
+  private totalAge = 10;
   private maxTotoalWareHouseCapcity = 200;
 
   private eventObj = {
@@ -79,7 +79,7 @@ export default class GameData extends cc.Component {
       ).string = this.WareHouseCapcity + "/" + this.totoalWareHouseCapcity;
       return 1;
     } else {
-      console.log("Not enough cash");
+      alert("Not enough cash！")
       return 0;
     }
   }
