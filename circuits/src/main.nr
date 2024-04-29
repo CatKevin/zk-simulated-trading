@@ -18,6 +18,15 @@ fn test_main() {
     main(price, positions, cash, total);
 }
 
+#[test]
+fn test_main2() {
+    let price = [0,4585,0,1650,7956,7649,0,39];
+    let positions = [0,0,0,110,0,0,0,0];
+    let cash = 1177565;
+    let total = 1359065;
+    main(price, positions, cash, total);
+}
+
 #[test(should_fail)]
 fn test_main_failed() {
     let price = [10,20,30,0,0,0,0,0];
