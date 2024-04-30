@@ -1,4 +1,4 @@
-## Circuit
+## Trading Circuit
 
 This circuit project contains all the necessary ingredients to upload to Sindri's API and start requesting proofs.
 
